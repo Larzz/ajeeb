@@ -35,5 +35,7 @@
         'OUR' => 'our',
         'PRODUCTS' => 'Products',
         'BROWSE' => 'Browse',
+        'OUR' => 'Our',
+        'CATEGORIES' => 'Categories',
     ];
 ?>

@@ -15,7 +15,6 @@
                            <img src="{{ asset('images/logo-arabic.png') }}" class="logo " alt="Logo">
                         @else
                           <img src="{{ asset('images/logo-english.png') }}" class="logo logo-size-home" class="logo" alt="Logo">
-
                         @endif
                     </a>
                 </div>

@@ -23,7 +23,19 @@ const mix = require('laravel-mix');
         'resources/css/plugins.min.css',
         'resources/css/style.css',
         'resources/css/responsive.css',
+        'resources/css/simple-lightbox.css',
     ], 'public/css/all.css').version();
+
+    mix.styles([
+        'resources/administrator/css/plugins.min.css',
+        'resources/administrator/css/style.css',
+        'resources/administrator/css/fine-uploader-new.css',
+    ], 'public/css/administrator.css').version();
+
+    mix.scripts([
+        'resources/administrator/js/plugins.min.js',
+        'resources/administrator/js/jquery.fine-uploader.min.js',
+    ], 'public/js/administrator.js').version();
 
     mix.scripts([
         'resources/js/jquery-1.12.4.min.js',
@@ -42,4 +54,5 @@ const mix = require('laravel-mix');
         'resources/js/YTPlayer.min.js',
         'resources/js/bootsnav.js',
         'resources/js/main.js',
+        'resources/js/simple-lightbox.js',
     ], 'public/js/all.js').version();

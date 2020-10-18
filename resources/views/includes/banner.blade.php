@@ -85,9 +85,9 @@
     </div>
     <!-- End Banner -->
     <!-- Shape -->
-               <div class="wavesshape">
+               {{-- <div class="wavesshape">
                <img src="{{ asset('images/shape.png') }}" alt="Shape">
-            </div>
+            </div> --}}
             <!-- Shape -->
     {{-- http://placehold.jp/800x600.png --}}
 

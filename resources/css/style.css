@@ -2347,7 +2347,7 @@ body,
 }
 
 .food-menu-area .menu-lists .thumb img {
-  clip-path: polygon(0 85%, 0 0, 100% 0, 100% 85%, 50% 100%);
+  /* clip-path: polygon(0 85%, 0 0, 100% 0, 100% 85%, 50% 100%); */
 }
 
 .food-menu-area.path-less .menu-lists .thumb img,

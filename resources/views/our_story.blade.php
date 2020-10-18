@@ -26,8 +26,10 @@
             <div class="row">
                 <div class="about-items">
                     <div class="col-md-6 thumb">
-                        <img src="{{ asset('images/products/product6.png') }}" alt="Thumb">
-                        <a href="https://www.youtube.com/watch?v=owhuBrGIOsE" class="popup-youtube light video-play-button item-center">
+                        {{-- <img src="{{ asset('images/products/product6.png') }}" alt="Thumb"> --}}
+                          <img src="https://images.unsplash.com/photo-1566177229701-8895c29b9c68?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80
+                          " alt="Thumb">
+                        <a href="http://www.youtube.com/watch?v=nMsZkTA75D0" class="popup-youtube light video-play-button item-center">
                             <i class="fa fa-play"></i>
                         </a>
                     </div>

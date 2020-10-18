@@ -8,13 +8,18 @@ use Illuminate\Support\Facades\Session;
 use App;
 use Mail;
 
+use App\Model\Category;
+use App\Model\Contacts;
+use App\Model\Products;
+use App\Model\Subscribers;
+
 class HomeController extends Controller
 {
     public function index() {
         $title = App::isLocale('ar') ? 'الصفحة الرئيسية - AJEEB-SWITCH.COM' :  'HOME - AJEEB-SWITCH.COM ';
         // $products = array_splice(array_unique( (array) $this->products()), 0, 3);
         $products = $this->twodshuffle( (array) $this->products());
-        $meta_data = array('title' => $title, 'products' => $products);
+        $meta_data = array('title' => $title, 'products' => $products, 'categories' => Category::get());
         return view('home', $meta_data);
     }
 
@@ -22,6 +27,19 @@ class HomeController extends Controller
         $title = App::isLocale('ar') ? ' منتجاتنا  - AJEEB-SWITCH.COM'  :  'OUR PRODUCTS - AJEEB-SWITCH.COM ';
         $meta_data = array('products' => $this->products(), 'title' => $title);
         return view('our_products',$meta_data);
+    }
+
+    public function product_page($product_id) {
+        $title = App::isLocale('ar') ? ' منتجاتنا  - AJEEB-SWITCH.COM'  :  'OUR PRODUCTS - AJEEB-SWITCH.COM ';
+        $meta_data = array('products' => $this->products(), 'title' => $title);
+        return view('product_page',$meta_data);
+    }
+
+    public function category_page($unique_id, $sluq) {
+        $category = Category::where('unique_id', $unique_id)->first();
+        $title = App::isLocale('ar') ? $category->name_ar . '- AJEEB-SWITCH.COM'  :  $category->name . '-AJEEB-SWITCH.COM ';
+        $products = Products::where('category_id', $category->id)->get();
+        return view('category_page', ['products' => $products]);
     }
 
     public function our_story() {
@@ -73,16 +91,27 @@ class HomeController extends Controller
             'message' => $request->message
         );
 
-        $email = $request->email;
-        $name = $request->name;
+        $contacts = new Contacts;
+        $contacts->name = $request->name;
+        $contacts->email = $request->email;
+        $contacts->number = $request->phone;
+        $contacts->message = $request->message;
+        $contacts->ip_address = $request->ip();
 
-        $send = Mail::send('email.newsletter', [ 'email' => $email, 'name' => $name, 'data' => $data ] , function ($messaage) use ($email, $name, $data) {
-            $messaage->from('ajeeb@ajeeb-switch.com', 'ajeeb-switch.com');
-            $messaage->to($email, $name)->subject('ajeeb-switch.com contact form');
-            $messaage->bcc('larz.parba@gmail.com');
-        });
+        if ($contacts->save()) {
 
-        $status = true;
+            $email = $request->email;
+            $name = $request->name;
+    
+            $send = Mail::send('email.newsletter', [ 'email' => $email, 'name' => $name, 'data' => $data ] , function ($messaage) use ($email, $name, $data) {
+                $messaage->from('ajeeb@ajeeb-switch.com', 'ajeeb-switch.com');
+                $messaage->to($email, $name)->subject('ajeeb-switch.com contact form');
+                $messaage->bcc('larz.parba@gmail.com');
+            });
+
+            $status = true; 
+
+        }
 
         $response = array('status' => $status);
         return response()->json($response);
@@ -93,14 +122,22 @@ class HomeController extends Controller
         
         $status = false;
         $email = $request->email;
-        
-        $send = Mail::send('email.contact', [ $email ],function ($m) use ($email) {
-            $m->from('ajeeb@ajeeb-switch.com', 'ajeeb-switch.com');
-            $m->to($email)->subject('ajeeb-switch.com newsletter subscription');
-            $m->bcc('larz.parba@gmail.com');
-        });
 
-        $status = true;
+        $subscribers = new Subscribers;
+        $subscribers->email = $request->email;
+        $subscribers->ip_address = $request->ip();
+
+        if($subscribers->save()) {
+
+            $send = Mail::send('email.contact', [ $email ],function ($m) use ($email) {
+                $m->from('ajeeb@ajeeb-switch.com', 'ajeeb-switch.com');
+                $m->to($email)->subject('ajeeb-switch.com newsletter subscription');
+                $m->bcc('larz.parba@gmail.com');
+            });
+    
+            $status = true;
+
+        }
 
         $response = array('status' => $status);
         return response()->json($response);
@@ -135,7 +172,6 @@ class HomeController extends Controller
                 'class' => 'white_meat',
                 'image' => asset('images/products/white_meat_tuna_sunflower_oil.png'),
                 'description_ar' => 'يحتوي على نسبة عالية جدًا من أوميغا 3 الذي يعيد إنتاج الجسم للمركبات الالتهابية ويمنع خبز الكولاجين ويحافظ على البشرة شابة ونضرة. ',
-
                 'description' => 'Has a very high level of Omega-3 which redules the body production of inflammatory compounds and prevents collagen breadown and keeps the skin young and fresh looking '
 
             ],
@@ -332,6 +368,78 @@ class HomeController extends Controller
                 'packing' => '6x2x360GM',
                 'description_ar' => 'يحتوي على نسبة عالية جدًا من أوميغا 3 الذي يعيد إنتاج الجسم للمركبات الالتهابية ويمنع خبز الكولاجين ويحافظ على البشرة شابة ونضرة. ',
 
+                'description' => 'Has a very high level of Omega-3 which redules the body production of inflammatory compounds and prevents collagen breadown and keeps the skin young and fresh looking '
+            ],
+            (object) [
+                'name_ar' => 'صلصة الباستا',
+                'name' => 'Mini Reqaq - Cheddar Cheese',
+                'class' => 'mini_reqaq',
+                'image' => asset('images/products/pasta_sauce_plain.png'),
+                'packing' => '',
+                'description_ar' => 'يحتوي على نسبة عالية جدًا من أوميغا 3 الذي يعيد إنتاج الجسم للمركبات الالتهابية ويمنع خبز الكولاجين ويحافظ على البشرة شابة ونضرة. ',
+                'description' => 'Has a very high level of Omega-3 which redules the body production of inflammatory compounds and prevents collagen breadown and keeps the skin young and fresh looking '
+            ],
+            (object) [
+                'name_ar' => 'صلصة الباستا',
+                'name' => 'Mini Reqaq - Black Olive',
+                'class' => 'mini_reqaq',
+                'image' => asset('images/products/pasta_sauce_plain.png'),
+                'packing' => '',
+                'description_ar' => 'يحتوي على نسبة عالية جدًا من أوميغا 3 الذي يعيد إنتاج الجسم للمركبات الالتهابية ويمنع خبز الكولاجين ويحافظ على البشرة شابة ونضرة. ',
+                'description' => 'Has a very high level of Omega-3 which redules the body production of inflammatory compounds and prevents collagen breadown and keeps the skin young and fresh looking '
+            ],
+            (object) [
+                'name_ar' => 'صلصة الباستا',
+                'name' => 'Mini Reqaq - Halloumi Cheese',
+                'class' => 'mini_reqaq',
+                'image' => asset('images/products/pasta_sauce_plain.png'),
+                'packing' => '',
+                'description_ar' => 'يحتوي على نسبة عالية جدًا من أوميغا 3 الذي يعيد إنتاج الجسم للمركبات الالتهابية ويمنع خبز الكولاجين ويحافظ على البشرة شابة ونضرة. ',
+                'description' => 'Has a very high level of Omega-3 which redules the body production of inflammatory compounds and prevents collagen breadown and keeps the skin young and fresh looking '
+            ],
+            (object) [
+                'name_ar' => 'صلصة الباستا',
+                'name' => 'Mini Reqaq - Cinnamon',
+                'class' => 'mini_reqaq',
+                'image' => asset('images/products/pasta_sauce_plain.png'),
+                'packing' => '',
+                'description_ar' => 'يحتوي على نسبة عالية جدًا من أوميغا 3 الذي يعيد إنتاج الجسم للمركبات الالتهابية ويمنع خبز الكولاجين ويحافظ على البشرة شابة ونضرة. ',
+                'description' => 'Has a very high level of Omega-3 which redules the body production of inflammatory compounds and prevents collagen breadown and keeps the skin young and fresh looking '
+            ],
+            (object) [
+                'name_ar' => 'صلصة الباستا',
+                'name' => 'Mini Reqaq - Green Olive',
+                'class' => 'mini_reqaq',
+                'image' => asset('images/products/pasta_sauce_plain.png'),
+                'packing' => '',
+                'description_ar' => 'يحتوي على نسبة عالية جدًا من أوميغا 3 الذي يعيد إنتاج الجسم للمركبات الالتهابية ويمنع خبز الكولاجين ويحافظ على البشرة شابة ونضرة. ',
+                'description' => 'Has a very high level of Omega-3 which redules the body production of inflammatory compounds and prevents collagen breadown and keeps the skin young and fresh looking '
+            ],
+            (object) [
+                'name_ar' => 'صلصة الباستا',
+                'name' => 'Mini Reqaq - Thyme',
+                'class' => 'mini_reqaq',
+                'image' => asset('images/products/pasta_sauce_plain.png'),
+                'packing' => '',
+                'description_ar' => 'يحتوي على نسبة عالية جدًا من أوميغا 3 الذي يعيد إنتاج الجسم للمركبات الالتهابية ويمنع خبز الكولاجين ويحافظ على البشرة شابة ونضرة. ',
+                'description' => 'Has a very high level of Omega-3 which redules the body production of inflammatory compounds and prevents collagen breadown and keeps the skin young and fresh looking '
+            ],
+            (object) [
+                'name_ar' => 'صلصة الباستا',
+                'name' => 'Mini Reqaq - Saffron & Cardamon',
+                'class' => 'mini_reqaq',
+                'image' => asset('images/products/pasta_sauce_plain.png'),
+                'packing' => '',
+                'description_ar' => 'يحتوي على نسبة عالية جدًا من أوميغا 3 الذي يعيد إنتاج الجسم للمركبات الالتهابية ويمنع خبز الكولاجين ويحافظ على البشرة شابة ونضرة. ',
+                'description' => 'Has a very high level of Omega-3 which redules the body production of inflammatory compounds and prevents collagen breadown and keeps the skin young and fresh looking '
+            ],
+            (object) [
+                'name_ar' => 'صلصة الباستا',
+                'name' => 'Mini Reqaq - Potato, Salt & Vinegar',
+                'class' => 'mini_reqaq',
+                'image' => asset('images/products/pasta_sauce_plain.png'),
+                'packing' => '',
+                'description_ar' => 'يحتوي على نسبة عالية جدًا من أوميغا 3 الذي يعيد إنتاج الجسم للمركبات الالتهابية ويمنع خبز الكولاجين ويحافظ على البشرة شابة ونضرة. ',
                 'description' => 'Has a very high level of Omega-3 which redules the body production of inflammatory compounds and prevents collagen breadown and keeps the skin young and fresh looking '
             ],
         ];
