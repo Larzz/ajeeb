@@ -69,130 +69,58 @@
                         </div>
                     </div>
                     <div class="col-md-7 info">
-                        <h2>How do i make raservations</h2>
+                        <h2>{{ App::isLocale('ar')  ? $product->name_ar : $product->name }}</h2>
                         <p>
-                            Pleased anxious or as in by viewing forbade minutes prevent. Too leave had those get being led weeks blind. Had men rose from down lady able. Its son him ferrars proceed six parlors.
+                            {{ App::isLocale('ar')  ? $product->description_ar : $product->description }}
                         </p>
                     </div>
-                    <!-- Start Form -->
-                    
-
-                 
-                    
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="food-menu-area path-less carousel-shadow default-padding">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    <div class="site-heading text-center">
-                        <h3>Discorver</h3>
-                        <h2>Our specials</h2>
-                        <p>
-                            While mirth large of on front. Ye he greater related adapted proceed entered an. Through it examine express promise no. Past add size game cold girl off how old
-                        </p>
+    @if (!empty($related_products))
+        <div class="food-menu-area path-less carousel-shadow default-padding">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="site-heading text-center">
+                            <h2>Related Products</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="menu-lists food-menu-carousel owl-carousel owl-theme text-center">
+                            @foreach ($related_products as $related_product)
+                                <div class="item">
+                                    <div class="thumb">
+                                        <a href="#">
+                                            <img src="assets/img/800x600.png" alt="Thumb">
+                                        </a>
+                                     {{--    <div class="price">
+                                            <h5>$5.90</h5>
+                                        </div> --}}
+                                    </div>
+                                    <div class="info">
+                                        <h4><a href="#">{{ App::isLocale('ar')  ? $related_product->name_ar : $related_product->name }}</a></h4>
+                                        <p>
+                                            {{ App::isLocale('ar')  ? $related_product->description_ar : $related_product->description }}
+                                        </p>
+                                        <div class="button">
+                                            <a href="#">View Products</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                            
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="menu-lists food-menu-carousel owl-carousel owl-theme text-center">
-                        <!-- Single Item -->
-                        <div class="item">
-                            <div class="thumb">
-                                <a href="#">
-                                    <img src="assets/img/800x600.png" alt="Thumb">
-                                </a>
-                                <div class="price">
-                                    <h5>$5.90</h5>
-                                </div>
-                            </div>
-                            <div class="info">
-                                <h4><a href="#">Crispy Crust Pizzeria</a></h4>
-                                <span>Mutton / Olive Oil / Salt</span>
-                                <p>
-                                    Considered introduced themselves mr to discretion at. Means among saw hopes for. Death mirth in oh learn he equal on.
-                                </p>
-                                <div class="button">
-                                    <a href="#">Order Now</a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Single Item -->
-                        <!-- Single Item -->
-                        <div class="item">
-                            <div class="thumb">
-                                <a href="#">
-                                    <img src="assets/img/800x600.png" alt="Thumb">
-                                </a>
-                                <div class="price">
-                                    <h5>$18.10</h5>
-                                </div>
-                            </div>
-                            <div class="info">
-                                <h4><a href="#">Luger Burger</a></h4>
-                                <span>Beef / Olive Oil / Salt</span>
-                                <p>
-                                    Considered introduced themselves mr to discretion at. Means among saw hopes for. Death mirth in oh learn he equal on.
-                                </p>
-                                <div class="button">
-                                    <a href="#">Order Now</a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Single Item -->
-                        <!-- Single Item -->
-                        <div class="item">
-                            <div class="thumb">
-                                <a href="#">
-                                    <img src="assets/img/800x600.png" alt="Thumb">
-                                </a>
-                                <div class="price">
-                                    <h5>$6.00</h5>
-                                </div>
-                            </div>
-                            <div class="info">
-                                <h4><a href="#">Fries McDonald's</a></h4>
-                                <span>Chicken / Olive Oil / Salt</span>
-                                <p>
-                                    Considered introduced themselves mr to discretion at. Means among saw hopes for. Death mirth in oh learn he equal on.
-                                </p>
-                                <div class="button">
-                                    <a href="#">Order Now</a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Single Item -->
-                        <!-- Single Item -->
-                        <div class="item">
-                            <div class="thumb">
-                                <a href="#">
-                                    <img src="assets/img/800x600.png" alt="Thumb">
-                                </a>
-                                <div class="price">
-                                    <h5>$11.50</h5>
-                                </div>
-                            </div>
-                            <div class="info">
-                                <h4><a href="#">Chicken Popeyes</a></h4>
-                                <span>Mutton / Olive Oil / Salt</span>
-                                <p>
-                                    Considered introduced themselves mr to discretion at. Means among saw hopes for. Death mirth in oh learn he equal on.
-                                </p>
-                                <div class="button">
-                                    <a href="#">Order Now</a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Single Item -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>git 
+        </div> 
+    @endif
+ 
 
 @endsection
 

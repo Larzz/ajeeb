@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
 
     <!-- ========== Start Stylesheet ========== -->
-    <link href="{{ mix('css/administrator.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/administrator.css') }}" rel="stylesheet" />
     <!-- ========== End Stylesheet ========== -->
     <!-- ========== Google Fonts ========== -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap.min.css">
     @yield('uploader')
-    <script src="{{ mix('js/administrator.js') }}"></script>
+    <script src="{{ asset('js/administrator.js') }}"></script>
 </head>
 
 <body>

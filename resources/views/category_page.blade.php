@@ -6,14 +6,14 @@
 
       <!-- Start Breadcrumb 
     ============================================= -->
-    <div class="breadcrumb-area shadow text-center dark bg-fixed text-light" style="background-image: url({{ asset('images/bg-101.jpg') }});">
+    <div class="breadcrumb-area shadow text-center dark bg-fixed text-light" style="background-image: url({{ asset('images/category/') }}/{{ $category->featured_image }});">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h1>{{ __('default.our_products') }}</h1>
+                    <h1> {{ App::isLocale('ar') ? $category->name_ar : $category->name }} </h1>
                     <ul class="breadcrumb">
                         <li><a href="#"><i class="fas fa-home"></i> {{ __('default.home') }}</a></li>
-                        <li class="active"> {{ __('default.our_products') }} </li>
+                        <li class="active"> {{ App::isLocale('ar') ? $category->name_ar : $category->name }}  </li>
                     </ul>
                 </div>
             </div>
@@ -27,7 +27,7 @@
             <div class="food-menu-area text-center">
                 <div class="row">
                     <div class="col-md-12 food-menu-content">
-                        <div class="mix-item-menu text-center">
+                        <div class="mix-item-menu text-center hide">
                             <button class="active" data-filter="*">{{ __('default.ALL')}}</button>
                             <button data-filter=".white_meat">{{ __('default.WHITEMEAT_TUNA')}}</button>
                             <button data-filter=".yellowfin_chunk">{{ __('default.YELLOWFIN_CHUNK') }}</button>
@@ -45,16 +45,12 @@
                                 @endphp
                                 @foreach ($products as $value)
                                 <!-- Single Item -->
-                                <div class="item-single pf-item {{ $value->class }}">
+                                <div class="item-single pf-item">
                                     <div class="item">
                                        <div class="thumb_{{ $count++ }}">
-                                            <a href="{{ $value->image }}">
-                                                <img src="{{ $value->image }}" alt="Thumb">
+                                            <a href="{{ route('home.product_page', ['unique_id' => $value->unique_id, 'category_sluq' => $category->sluq, 'product_sluq' => $value->sluq]) }}">
+                                                <img src="{{ asset('images/category/') }}/{{ $category->featured_image }}" alt="Thumb">
                                             </a>
-                                            <a href="{{ $value->image }}"  class="hide">
-                                                <img src="{{ $value->image }}" alt="Thumb">
-                                            </a>
-
                                             <div class="price hide">
                                                 <h5>$5.90</h5>
                                             </div>
@@ -65,8 +61,8 @@
                                          @else
                                             <h4><a href="#">  {{ $value->name }} </a></h4>
                                          @endif
-                                          <h6><a href="#">Available Packing: {{ $value->packing ?? ""}}</a></h6>
-                                            <span>No Preservatives, No Colorants</span>
+                                       {{--    <h6><a href="#">Available Packing: {{ $value->packing ?? ""}}</a></h6>
+                                            <span>No Preservatives, No Colorants</span> --}}
                                             <p>
                                                 @if (App::isLocale('ar'))
                                                    {{ $value->description_ar }}
@@ -74,9 +70,9 @@
                                                      {{ $value->description }}
                                                 @endif
                                             </p>
-                                            <div class="button hide">
+                                         {{--    <div class="button hide">
                                                 <a href="#">Order Now</a>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>

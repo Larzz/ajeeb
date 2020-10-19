@@ -29,9 +29,12 @@ class HomeController extends Controller
         return view('our_products',$meta_data);
     }
 
-    public function product_page($product_id) {
-        $title = App::isLocale('ar') ? ' منتجاتنا  - AJEEB-SWITCH.COM'  :  'OUR PRODUCTS - AJEEB-SWITCH.COM ';
-        $meta_data = array('products' => $this->products(), 'title' => $title);
+    public function product_page($unique_id,$category_sluq, $product_sluq) {
+        $category = Category::where('sluq', $category_sluq)->first();
+        $product = Products::where('unique_id', $unique_id)->where('sluq', $product_sluq)->first();
+        $related_products = Products::where('id', '!=', $product->id)->where('category_id', $category->id)->get();
+        $title = App::isLocale('ar') ?  $product->name_ar . '- AJEEB-SWITCH.COM'  :  $product->name . '- AJEEB-SWITCH.COM ';
+        $meta_data = array('products' => $this->products(), 'title' => $title, 'product' => $product, 'other_related' => $related_products );
         return view('product_page',$meta_data);
     }
 
@@ -39,7 +42,7 @@ class HomeController extends Controller
         $category = Category::where('unique_id', $unique_id)->first();
         $title = App::isLocale('ar') ? $category->name_ar . '- AJEEB-SWITCH.COM'  :  $category->name . '-AJEEB-SWITCH.COM ';
         $products = Products::where('category_id', $category->id)->get();
-        return view('category_page', ['products' => $products]);
+        return view('category_page', ['products' => $products, 'category' => $category]);
     }
 
     public function our_story() {
