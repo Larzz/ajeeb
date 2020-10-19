@@ -29,12 +29,12 @@
                     <div class="col-md-12 food-menu-content">
                         <div class="mix-item-menu text-center">
                             <button class="active" data-filter="*">{{ __('default.ALL')}}</button>
-                            <button data-filter=".white_meat">{{ __('default.WHITEMEAT_TUNA')}}</button>
-                            <button data-filter=".yellowfin_chunk">{{ __('default.YELLOWFIN_CHUNK') }}</button>
-                            <button data-filter=".skipjack_tuna">{{ __('default.SKIP_JACK') }}</button>
-                            <button data-filter=".canned_sardine">{{ __('default.CANNED_SARDINE') }}</button>
-                            <button data-filter=".pasta_sauced">{{ __('default.PASTA_SAUCE') }}</button>
-                            <button data-filter=".mini_reqaq">{{ __('default.MINI_REQAQ') }}</button>
+                            @if ($categories)
+                              @foreach ($categories as $category)
+                                   <button data-filter=".{{ $category->sluq}}">{{  App::isLocale('ar') ? $category->name_ar : $category->name}}</button>
+                              @endforeach
+                            @endif
+                         
                         </div>
                         <!-- End Mixitup Nav-->
 
@@ -45,16 +45,18 @@
                                 @endphp
                                 @foreach ($products as $value)
                                 <!-- Single Item -->
-                                <div class="item-single pf-item {{ $value->class }}">
+                                <div class="item-single pf-item {{ $value->sluq }}">
                                     <div class="item">
                                        <div class="thumb_{{ $count++ }}">
-                                            <a href="{{ $value->image }}">
-                                                <img src="{{ $value->image }}" alt="Thumb">
-                                            </a>
-                                            <a href="{{ $value->image }}"  class="hide">
-                                                <img src="{{ $value->image }}" alt="Thumb">
+
+                                           <a href="{{ route('home.product_page', ['unique_id' => $value->unique_id, 'category_sluq' => $value->sluq, 'product_sluq' => $value->sluq]) }}">
+                                                <img src="{{ asset('images/category/') }}/{{ $category->featured_image }}" alt="Thumb">
                                             </a>
 
+
+                                          {{--   <a href="">
+                                                <img src="{{ $value->file_name }}" alt="Thumb">
+                                            </a> --}}
                                             <div class="price hide">
                                                 <h5>$5.90</h5>
                                             </div>

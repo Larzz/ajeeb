@@ -73,13 +73,13 @@
             },
           ],
           columnDefs: [
-              // {
-              //   width: "21%",
-              //   render: function(data, type, row) {
-                
-              //   },
-              //   targets: 6,
-              // },
+              {
+                width: "21%",
+                render: function(data, type, row) {
+                  let button = ``;
+                },
+                targets: 6,
+              },
           ],
       });
   </script>  

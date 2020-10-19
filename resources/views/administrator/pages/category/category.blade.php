@@ -43,6 +43,7 @@
 
 @section('script')
   <script>
+
       var table = $("#table").DataTable({
           processing: true,
           serverSide: true,
@@ -108,8 +109,21 @@
                 },
                 targets: 3,
               },
+              {
+                render: function(data, type, row) {
+                  let id = row['id'];
+                  let button = `<button> </button>`
+                  return button
+                },
+                targets: 7,
+              },
+          ],
           ],
       });
+
+      function delete() {
+
+      }
 
   </script>  
 @endsection

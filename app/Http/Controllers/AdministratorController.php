@@ -39,7 +39,8 @@ class AdministratorController extends Controller
 
     public function get_products() {
         $query = Products::leftJoin('product_images', 'products.id', '=', 'product_images.id')
-                         ->select('products.id','products.name','products.description','products.name_ar', 'products.description_ar','product_images.filename','products.created_at','products.category_id')
+                         ->leftJoin('category', 'products.category_id', '=', 'category.id')
+                         ->select('products.id','products.name','products.description','products.name_ar', 'products.description_ar','product_images.filename','products.created_at','category.name as category_name')
                          ->get();
         return Datatables::of($query)->make(true); 
     }
@@ -187,6 +188,29 @@ class AdministratorController extends Controller
     }
 
     public function logout() {
+
+    }
+
+
+    public function register() {
+
+        $status = User::create([
+            'name' => $this->request->name,
+            'email' => $this->request->email,
+            'password' => Hash::make($this->request->password),
+        ]);
+
+        return redirect(route('admin.auth.login'));
+
+    }
+
+      public function login () {
+
+        $credentials = $this->request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            return redirect()->intended('home');
+        }
 
     }
 

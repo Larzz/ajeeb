@@ -19,12 +19,12 @@
                                 <thead>
                                       <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">First</th>
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Description</th>
                                         <th scope="col">Last</th>
-                                        <th scope="col">Handle</th>
                                         <th scope="col">Last</th>
-                                        <th scope="col">Last</th>
-                                        <th scope="col">Last</th>
+                                        <th scope="col">Category</th>
                                         <th scope="col">Last</th>
                                       </tr>
                                     </thead>
@@ -43,6 +43,7 @@
 
 @section('script')
   <script>
+
       var table = $("#table").DataTable({
           processing: true,
           serverSide: true,
@@ -67,25 +68,60 @@
             },
             {
               data: "description_ar",
+              visible:false
             },
             {
               data: "filename",
+                visible:false
             },
             {
-              data: "category_id",
+              data: "category_name",
             },
             {
               data: "created_at",
-              visible:false
             },
           ],
-          // columnDefs: [
-          //     {
-          //       render: function(data, type, row) {
-          //       },
-          //       targets: 4,
-          //     },
-          // ],
+          columnDefs: [
+               {
+                render: function(data, type, row) {
+                   let src_path = `{{ asset('images/product') }}`
+                   return `<img width="250x" class="img-response" src="${src_path}/${row['filename']}" />`
+                },
+                targets: 1,
+              },
+              {
+                render: function(data, type, row) {
+                  let english_name = row['name'];
+                  let arabic_name = row['name_ar'] ?? 'No Name'
+                  let format = `${english_name} <br/> ${arabic_name}`
+                  return format
+                },
+                targets: 2,
+              },
+              {
+                render: function(data, type, row) {
+                  let english_name = row['description'];
+                  let arabic_name = row['description_ar'] ?? 'No Description'
+                  let format = `${english_name} <br/> ${arabic_name}`
+                  return format
+                },
+                targets: 3,
+              },
+                 {
+                render: function(data, type, row) {
+                  let button = row['id'];
+                  return button
+                },
+                targets: 7,
+              },
+          ],
       });
+
+
+      function delete() {
+
+      }
+
+      
   </script>  
 @endsection

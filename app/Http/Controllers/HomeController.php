@@ -24,8 +24,13 @@ class HomeController extends Controller
     }
 
     public function our_products() {
+        $category = Category::all();
+        $products = Products::leftJoin('product_images', 'products.id', '=', 'product_images.id')
+                         ->leftJoin('category', 'products.category_id', '=', 'category.id')
+                         ->select('products.id','products.name','products.description','products.name_ar', 'products.description_ar','product_images.filename','products.created_at','category.name as category_name')
+                         ->get();
         $title = App::isLocale('ar') ? ' منتجاتنا  - AJEEB-SWITCH.COM'  :  'OUR PRODUCTS - AJEEB-SWITCH.COM ';
-        $meta_data = array('products' => $this->products(), 'title' => $title);
+        $meta_data = array('productss' => $this->products(), 'title' => $title, 'categories' => $category, 'products' => $products);
         return view('our_products',$meta_data);
     }
 
