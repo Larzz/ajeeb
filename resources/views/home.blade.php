@@ -479,9 +479,9 @@ img {
                     </div>
                     <div class="col-md-6 info">
                         <h3 class="text-center">{{ __('default.our_story') }}</h3>
-                        <h2>What is Lorem Ipsum?</h2>
                         <p>
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.                        </p>
+                            {{ _('default.OUR_STORY_PAR') }}
+                        </p>
                     </div>
                 </div>
             </div>

@@ -37,5 +37,9 @@
         'BROWSE' => 'Browse',
         'OUR' => 'Our',
         'CATEGORIES' => 'Categories',
+        'OUR_STORY_PAR' => 'Over the last few years, our team has developed the traditional Arabic bread famously known as Reqaq made with fresh milk and the finest wheat combined with a variety of natural flavors. The Reqaq is normally consumed as a healthy food snack by every family in the region. Along with this, the birth of our brand called AJEEB which means unique and beautiful.
+        In the course of time and with the increasing demand of the consumers, AJEEB has developed other range of food products such as Tuna, Sardines, Pasta Sauce, Pizza Sauce, Hot Sauce, Vinegar and still on process of developing a few more to cater the needs of our valued customers.
+        AJEEB aim to be one of the top brands in the MENA Region by providing consumers prime quality products in the market.
+        '
     ];
 ?>
