@@ -3,14 +3,15 @@
 @section('content')   
 
        <!-- Start Breadcrumb   ============================================= -->
-    <div class="breadcrumb-area shadow text-center dark bg-fixed text-light" style="background-image: url({{ asset('images/bg-101.jpg') }});">
+    <div class="breadcrumb-area shadow text-center dark bg-fixed text-light" style="background-image: url({{ asset('images/product-banner.jpg') }});">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                <h1>{{ __('default.get_in_touch') }}</h1>
+                <h1>  {{ App::isLocale('ar')  ? $product->name_ar : $product->name }}
+                </h1>
                     <ul class="breadcrumb">
                     <li><a href="{{ route('home.index') }}"><i class="fas fa-home"></i> {{ __('default.home') }}</a></li>
-                        <li class="active">{{ __('default.get_in_touch') }}</li>
+                        <li class="active"> {{ App::isLocale('ar')  ? $product->name_ar : $product->name }}</li>
                     </ul>
                 </div>
             </div>
@@ -25,46 +26,70 @@
                 <div class="reservation-items about-items">
                     <div class="col-md-5 form">
                         <div class="form-box" style="padding: 0px 0px 0px 0px;">
-                            <div class="avatar">
-                                <img src="http://ajeeb.test/images/products/white_meat_tuna_olive_oil.png" alt="Thumb">
-                             
-                            </div>
-                            <div class="sidebar-item gallery">
-                                <div class="sidebar-info">
-                                    <ul>
-                                        <li>
-                                            <a href="#">
-                                                <img src="http://ajeeb.test/images/products/white_meat_tuna_olive_oil.png" alt="thumb">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img src="http://ajeeb.test/images/products/white_meat_tuna_olive_oil.png" alt="thumb">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img src="http://ajeeb.test/images/products/white_meat_tuna_olive_oil.png" alt="thumb">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img src="http://ajeeb.test/images/products/white_meat_tuna_olive_oil.png" alt="thumb">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img src="http://ajeeb.test/images/products/white_meat_tuna_olive_oil.png" alt="thumb">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img src="http://ajeeb.test/images/products/white_meat_tuna_olive_oil.png" alt="thumb">
-                                            </a>
-                                        </li>
-                                    </ul>
+                            @php
+                                $count = 0;
+                            @endphp
+
+                            @if (!empty($product_images))
+
+                                @if (count($product_images) > 0)
+                                    @foreach ($product_images as $image)
+
+                                    <div class="avatar">
+                                       <img src="{{ asset('images/product')}}/{{ $image->filename }}" alt="Thumb">
+                                     </div>
+                                
+                                    @php
+                                        $count++
+                                    @endphp
+                                    @endforeach
+
+                                @else
+
+                                    <div class="sidebar-item gallery">
+                                        <div class="sidebar-info">
+                                            <ul>
+                                                <li>
+                                                    <a href="#">
+                                                        <img src="http://ajeeb.test/images/products/white_meat_tuna_olive_oil.png" alt="thumb">
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <img src="http://ajeeb.test/images/products/white_meat_tuna_olive_oil.png" alt="thumb">
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <img src="http://ajeeb.test/images/products/white_meat_tuna_olive_oil.png" alt="thumb">
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <img src="http://ajeeb.test/images/products/white_meat_tuna_olive_oil.png" alt="thumb">
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <img src="http://ajeeb.test/images/products/white_meat_tuna_olive_oil.png" alt="thumb">
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <img src="http://ajeeb.test/images/products/white_meat_tuna_olive_oil.png" alt="thumb">
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                @endif
+                              
+                            @else
+                                <div class="avatar">
+                                <img src="{{ asset('images/product')}}/image_coming_1.png" alt="Thumb">
                                 </div>
-                            </div>
+                            @endif
                          
                         </div>
                     </div>

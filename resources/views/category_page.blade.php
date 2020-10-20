@@ -44,13 +44,15 @@
                                     $count = 0;
                                 @endphp
                                 @foreach ($products as $value)
-                                <!-- Single Item -->
                                 <div class="item-single pf-item">
                                     <div class="item">
                                        <div class="thumb_{{ $count++ }}">
                                             <a href="{{ route('home.product_page', ['unique_id' => $value->unique_id, 'category_sluq' => $category->sluq, 'product_sluq' => $value->sluq]) }}">
-                                                <img src="{{ asset('images/category/') }}/{{ $category->featured_image }}" alt="Thumb">
-                                            </a>
+                                                @if ($value->filename)
+                                                    <img src="{{ asset('images/product/') }}/{{ $value->filename }}" alt="Thumb">
+                                                 @else
+                                                    <img src="{{ asset('images/product/') }}/image_coming_1.png" alt="Thumb">
+                                                @endif                                            </a>
                                             <div class="price hide">
                                                 <h5>$5.90</h5>
                                             </div>
@@ -61,8 +63,6 @@
                                          @else
                                             <h4><a href="#">  {{ $value->name }} </a></h4>
                                          @endif
-                                       {{--    <h6><a href="#">Available Packing: {{ $value->packing ?? ""}}</a></h6>
-                                            <span>No Preservatives, No Colorants</span> --}}
                                             <p>
                                                 @if (App::isLocale('ar'))
                                                    {{ $value->description_ar }}
@@ -70,13 +70,10 @@
                                                      {{ $value->description }}
                                                 @endif
                                             </p>
-                                         {{--    <div class="button hide">
-                                                <a href="#">Order Now</a>
-                                            </div> --}}
+                                        
                                         </div>
                                     </div>
                                 </div>
-                                <!-- End Single Item -->
                                 @endforeach
                             </div>
                         </div>

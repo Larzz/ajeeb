@@ -6,7 +6,7 @@
 
       <!-- Start Breadcrumb 
     ============================================= -->
-    <div class="breadcrumb-area shadow text-center dark bg-fixed text-light" style="background-image: url({{ asset('images/bg-101.jpg') }});">
+    <div class="breadcrumb-area shadow text-center dark bg-fixed text-light" style="background-image: url({{ asset('images/product-banner.jpg') }});">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -44,31 +44,30 @@
                                     $count = 0;
                                 @endphp
                                 @foreach ($products as $value)
+
                                 <!-- Single Item -->
-                                <div class="item-single pf-item {{ $value->sluq }}">
+                                <div class="item-single pf-item {{ $value->category_sluq }}">
                                     <div class="item">
                                        <div class="thumb_{{ $count++ }}">
-
-                                           <a href="{{ route('home.product_page', ['unique_id' => $value->unique_id, 'category_sluq' => $value->sluq, 'product_sluq' => $value->sluq]) }}">
-                                                <img src="{{ asset('images/category/') }}/{{ $category->featured_image }}" alt="Thumb">
+                                           <a href="{{ route('home.product_page', [ 'unique_id' => $value->unique_id, 'category_sluq' => $value->category_sluq, 'product_sluq' => $value->sluq]) }}">
+                                                @if ($value->filename)
+                                                     <img src="{{ asset('images/product/') }}/{{ $value->filename }}" alt="Thumb">
+                                                @else
+                                                     <img src="{{ asset('images/product/') }}/image_coming_1.png" alt="Thumb">
+                                                @endif
                                             </a>
-
-
-                                          {{--   <a href="">
-                                                <img src="{{ $value->file_name }}" alt="Thumb">
-                                            </a> --}}
                                             <div class="price hide">
                                                 <h5>$5.90</h5>
                                             </div>
                                         </div>
                                         <div class="info">
                                         @if (App::isLocale('ar'))
-                                            <h4><a href="#"> {{ $value->name_ar }}</a></h4>
+                                            <h4 style="font-weight:bolder"><a href="#"> {{ $value->name_ar }}</a></h4>
                                          @else
-                                            <h4><a href="#">  {{ $value->name }} </a></h4>
+                                            <h4 style="font-weight:bolder"><a href="#">  {{ $value->name }} </a></h4>
                                          @endif
-                                          <h6><a href="#">Available Packing: {{ $value->packing ?? ""}}</a></h6>
-                                            <span>No Preservatives, No Colorants</span>
+                                          {{-- <h6><a href="#">Available Packing: {{ $value->packing ?? ""}}</a></h6>
+                                            <span>No Preservatives, No Colorants</span> --}}
                                             <p>
                                                 @if (App::isLocale('ar'))
                                                    {{ $value->description_ar }}

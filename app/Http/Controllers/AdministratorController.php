@@ -38,11 +38,22 @@ class AdministratorController extends Controller
     }
 
     public function get_products() {
-        $query = Products::leftJoin('product_images', 'products.id', '=', 'product_images.id')
+        $query = Products::leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
                          ->leftJoin('category', 'products.category_id', '=', 'category.id')
-                         ->select('products.id','products.name','products.description','products.name_ar', 'products.description_ar','product_images.filename','products.created_at','category.name as category_name')
+                         ->select('products.id','products.name','products.description','products.name_ar', 'products.description_ar','product_images.filename as filename','products.created_at','category.name as category_name')
                          ->get();
         return Datatables::of($query)->make(true); 
+    }
+
+    public function get_product_images($product_id) {
+        $query = ProductImage::where('product_id', $product_id)->get();
+        return Datatables::of($query)->make(true); 
+    }
+
+    public function delete_image() {
+        $deleted = ProductImage::where('id', $this->request->id)
+        ->delete();
+        return Response()->json(['status' => $deleted]);
     }
 
     public function upload_product() {
@@ -73,28 +84,33 @@ class AdministratorController extends Controller
         $products->name = $this->request->name;
         $products->name_ar = $this->request->name_ar;
         $products->description = $this->request->description;
-        $products->description_ar = $this->request->description;
+        $products->description_ar = $this->request->description_ar;
         if ($products->save()) {
             $status = true;
         }
         return Response()->json(['status' => $status, 'product_id' => $products->id]); 
     }
 
+    public function edit_product_page($id) {
+        $product = Products::where('id', $id)->first();
+        return view('administrator.pages.product.edit_product_page', ['product' => $product, 'categories' => Category::select('*')->get()]);
+    }
+
     public function edit_products() {
-        $updated = Products::where('id', $request->id)
+        $updated = Products::where('id', $this->request->id)
         ->update([
-            'name' => $request->name,
-            'name_ar' => $request->name_ar,
-            'description' => $request->description,
-            'description_ar' => $request->description_ar,
+            'name' => $this->request->name,
+            'name_ar' => $this->request->name_ar,
+            'description' => $this->request->description,
+            'description_ar' => $this->request->description_ar,
         ]);
         return Response()->json(['updated' => $updated]);
     }
 
-    public function delete_products() {
-        $deleted = Products::where('id', $request->id)
+    public function delete_product() {
+        $deleted = Products::where('id', $this->request->id)
             ->delete();
-        return Response()->json(['deleted' => $deleted]);
+        return Response()->json(['status' => $deleted]);
     }
 
     public function category() {
@@ -103,6 +119,11 @@ class AdministratorController extends Controller
 
     public function add_category() {
         return view('administrator.pages.category.add_category');
+    }
+
+    public function edit_category_page($id) {
+        $category = Category::where('id', $id)->first();
+        return view('administrator.pages.category.edit_category_page', ['category' => $category]);
     }
 
     public function get_categories() {
@@ -140,13 +161,15 @@ class AdministratorController extends Controller
 
     public function edit_category() {
 
-        $updated = Category::where('id', $request->id)
+        $updated = Category::where('id', $this->request->id)
         ->update([
             'sluq' => Str::slug($this->request->name, '-'),
-            'name' => $request->name,
-            'name_ar' => $request->name_ar,
-            'description' => $request->description,
-            'description_ar' => $request->description_ar,
+            'name' => $this->request->name,
+            'name_ar' => $this->request->name_ar,
+            'description' => $this->request->description,
+            'description_ar' => $this->request->description_ar,
+            'featured_image' => $this->request->featured_image,
+
         ]);
 
         return Response()->json(['updated' => $updated]);
@@ -154,9 +177,9 @@ class AdministratorController extends Controller
     }
 
     public function delete_category() {
-        $deleted = Category::where('id', $request->id)
+        $deleted = Category::where('id', $this->request->id)
         ->delete();
-        return Response()->json(['deleted' => $deleted]);
+        return Response()->json(['status' => $deleted]);
     }
 
     public function contacts() {
@@ -204,7 +227,7 @@ class AdministratorController extends Controller
 
     }
 
-      public function login () {
+    public function login () {
 
         $credentials = $this->request->only('email', 'password');
 

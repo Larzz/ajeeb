@@ -25,7 +25,7 @@
                                           <th scope="col">Description </th>
                                           <th scope="col">Featured Image</th>
                                           <th scope="col">Created At</th>
-                                          <th scope="col">Updated At</th>
+                                          <th scope="col">Action</th>
                                         </tr>
                                       </thead>
                                       <tbody>
@@ -80,14 +80,20 @@
             },
             {
               data: "updated_at",
-              visible:false
+              visible:true
             },
           ],
           columnDefs: [
               {
                 render: function(data, type, row) {
                    let src_path = `{{ asset('images/category') }}`
-                   return `<img width="250x" class="img-response" src="${src_path}/${row['featured_image']}" />`
+                   if(row['featured_image']) {
+                     return `<img width="250x" class="img-response" src="${src_path}/${row['featured_image']}" />`
+
+                   } else {
+                    
+                    return `<img width="250x" class="img-response" src="${src_path}/image_coming_1.png" />`
+                   }
                 },
                 targets: 1,
               },
@@ -111,19 +117,74 @@
               },
               {
                 render: function(data, type, row) {
-                  let id = row['id'];
-                  let button = `<button> </button>`
-                  return button
+                  let edit_link = `{{ route('administrator.edit_category_page') }}`
+                  let edit = `<a href="${edit_link}/${row['id']}" class="btn btn-sm primary"> Edit </a>`
+                  let deletes = `<a href="javascript:deletes(${row['id']})" class="btn btn-sm danger"> Delete </a>`
+                  return `${edit} ${deletes}`
                 },
                 targets: 7,
               },
           ],
-          ],
+        
       });
 
-      function delete() {
+      function deletes(id) {
+        const swalWithBootstrapButtons = Swal.mixin({
+          customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+          },
+          buttonsStyling: false
+        })
 
+        swalWithBootstrapButtons.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, delete it!',
+          cancelButtonText: 'No, cancel!',
+          reverseButtons: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+
+            $.ajax({
+              type: "DELETE",
+              dataType: "json",
+              url: `{{ route('administrator.delete_category') }}`,
+              data: {  id: id} ,
+              headers: {
+                  "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+              },
+              success: function(response) {
+                table.draw();
+                  swalWithBootstrapButtons.fire(
+                  'Deleted!',
+                  'Your file has been deleted.',
+                  'success'
+                )
+              },
+              beforeSend: function() {
+              },
+          });  
+
+           
+          
+          } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+          ) {
+            swalWithBootstrapButtons.fire(
+              'Cancelled',
+              'Your imaginary file is safe :)',
+              'error'
+            )
+          }
+        })
+
+        console.log(id)
       }
-
+    
   </script>  
+
 @endsection

@@ -25,7 +25,7 @@
                                         <th scope="col">Last</th>
                                         <th scope="col">Last</th>
                                         <th scope="col">Category</th>
-                                        <th scope="col">Last</th>
+                                        <th scope="col">Action</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -52,6 +52,7 @@
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
           },
           order: [[0, "desc"]],
+          "pageLength": 100,
           columns: [
             {
               data: "id",
@@ -72,7 +73,7 @@
             },
             {
               data: "filename",
-                visible:false
+              visible:false
             },
             {
               data: "category_name",
@@ -85,7 +86,12 @@
                {
                 render: function(data, type, row) {
                    let src_path = `{{ asset('images/product') }}`
-                   return `<img width="250x" class="img-response" src="${src_path}/${row['filename']}" />`
+                   console.log(row['filename'])
+                   if(row['filename']) {
+                      return `<img width="250x" class="img-response" src="${src_path}/${row['filename']}" />`
+                   } else {
+                      return `<img width="250x" class="img-response" src="${src_path}/image_coming_1.png" />`
+                   }
                 },
                 targets: 1,
               },
@@ -109,8 +115,10 @@
               },
                  {
                 render: function(data, type, row) {
-                  let button = row['id'];
-                  return button
+                  let edit_link = `{{ route('administrator.edit_product_page') }}`
+                  let edit = `<a href="${edit_link}/${row['id']}" class="btn btn-sm primary"> Edit </a>`
+                  let deletes = `<a href="javascript:deletes(${row['id']})" class="btn btn-sm danger"> Delete </a>`
+                  return `${edit} ${deletes}`
                 },
                 targets: 7,
               },
@@ -118,8 +126,63 @@
       });
 
 
-      function delete() {
+      function deletes(id) {
 
+        var table = $("#table").DataTable();
+
+
+        const swalWithBootstrapButtons = Swal.mixin({
+          customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+          },
+          buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, delete it!',
+          cancelButtonText: 'No, cancel!',
+          reverseButtons: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+
+              $.ajax({
+              type: "DELETE",
+              dataType: "json",
+              url: `{{ route('administrator.delete_products') }}`,
+              data: {  id: id} ,
+              headers: {
+                  "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+              },
+              success: function(response) {
+                table.draw();
+                  swalWithBootstrapButtons.fire(
+                  'Deleted!',
+                  'Your file has been deleted.',
+                  'success'
+                )
+              },
+              beforeSend: function() {
+              },
+          });  
+         
+          } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+          ) {
+            swalWithBootstrapButtons.fire(
+              'Cancelled',
+              'Your imaginary file is safe :)',
+              'error'
+            )
+          }
+        })
+
+    
       }
 
       

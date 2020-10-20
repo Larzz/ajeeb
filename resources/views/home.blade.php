@@ -394,9 +394,9 @@ img {
                                 </div>
                                 <div class="info">
                                     @if (App::isLocale('ar'))
-                                        <h4 class="mb-0"><a href="#">{{ $item->name_ar }}</a></h4>
+                                        <h4 style="font-weight: bolder" class="mb-0"><a href="#">{{ $item->name_ar }}</a></h4>
                                     @else
-                                        <h4 class="mb-0"><a href="#">{{ $item->name }}</a></h4>
+                                        <h4 style="font-weight: bolder" class="mb-0"><a href="#">{{ $item->name }}</a></h4>
                                     @endif
                                     {{-- <span class="sunflower-oil"> Sunflower Oil</span> --}}
                                     <p class="hide">

@@ -12,6 +12,7 @@ use App\Model\Category;
 use App\Model\Contacts;
 use App\Model\Products;
 use App\Model\Subscribers;
+use App\Model\ProductImage;
 
 class HomeController extends Controller
 {
@@ -25,10 +26,11 @@ class HomeController extends Controller
 
     public function our_products() {
         $category = Category::all();
-        $products = Products::leftJoin('product_images', 'products.id', '=', 'product_images.id')
-                         ->leftJoin('category', 'products.category_id', '=', 'category.id')
-                         ->select('products.id','products.name','products.description','products.name_ar', 'products.description_ar','product_images.filename','products.created_at','category.name as category_name')
-                         ->get();
+        $products = Products::leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
+                            ->leftJoin('category', 'products.category_id', '=', 'category.id')
+                            ->select('products.id','products.name','products.description','products.name_ar','products.sluq','products.unique_id', 'products.description_ar','product_images.filename','products.created_at','category.name as category_name', 'category.sluq as category_sluq')
+                            // ->groupBy('products','id')
+                            ->get();
         $title = App::isLocale('ar') ? ' منتجاتنا  - AJEEB-SWITCH.COM'  :  'OUR PRODUCTS - AJEEB-SWITCH.COM ';
         $meta_data = array('productss' => $this->products(), 'title' => $title, 'categories' => $category, 'products' => $products);
         return view('our_products',$meta_data);
@@ -38,16 +40,21 @@ class HomeController extends Controller
         $category = Category::where('sluq', $category_sluq)->first();
         $product = Products::where('unique_id', $unique_id)->where('sluq', $product_sluq)->first();
         $related_products = Products::where('id', '!=', $product->id)->where('category_id', $category->id)->get();
-        $title = App::isLocale('ar') ?  $product->name_ar . '- AJEEB-SWITCH.COM'  :  $product->name . '- AJEEB-SWITCH.COM ';
-        $meta_data = array('products' => $this->products(), 'title' => $title, 'product' => $product, 'other_related' => $related_products );
+        $product_images = ProductImage::where('product_id', $product->id)->get();
+        $title = App::isLocale('ar') ?  $product->name_ar . ' - AJEEB-SWITCH.COM'  :  $product->name . '- AJEEB-SWITCH.COM ';
+        $meta_data = array('products' => $this->products(), 'title' => $title, 'product' => $product, 'other_related' => $related_products, 'product_images' => $product_images );
         return view('product_page',$meta_data);
     }
 
     public function category_page($unique_id, $sluq) {
         $category = Category::where('unique_id', $unique_id)->first();
-        $title = App::isLocale('ar') ? $category->name_ar . '- AJEEB-SWITCH.COM'  :  $category->name . '-AJEEB-SWITCH.COM ';
-        $products = Products::where('category_id', $category->id)->get();
-        return view('category_page', ['products' => $products, 'category' => $category]);
+        $products = Products::leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
+                            ->leftJoin('category', 'products.category_id', '=', 'category.id')
+                            ->select('products.id','products.name','products.description','products.name_ar','products.sluq','product.unique_id', 'products.description_ar','product_images.filename','products.created_at','category.name as category_name', 'category.sluq as category_sluq')
+                            ->where('products.category_id', $category->id)
+                            ->get();
+        $title = App::isLocale('ar') ? $category->name_ar . ' - AJEEB-SWITCH.COM'  :  $category->name . '-AJEEB-SWITCH.COM ';
+        return view('category_page', ['products' => $products, 'category' => $category, 'title' => $title]);
     }
 
     public function our_story() {

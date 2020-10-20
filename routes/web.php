@@ -17,7 +17,7 @@ Route::get('/','HomeController@index')->name('home.index');
 
 Route::get('our-products','HomeController@our_products')->name('home.our_products');
 
-Route::get('v/{unique_id}/{category_sluq}/{product_sluq}/','HomeController@product_page')->name('home.product_page');
+Route::get('v/{unique_id?}/{category_sluq?}/{product_sluq?}/','HomeController@product_page')->name('home.product_page');
 Route::get('c/{unique_id}/{sluq}', 'HomeController@category_page')->name('home.category_page');
 
 Route::get('get-in-touch', 'HomeController@get_in_touch')->name('home.get_in_touch');
@@ -38,13 +38,15 @@ Route::prefix('administrator')->group(function() {
 
         Route::get('/', 'AdministratorController@products')->name('administrator.products');
         Route::get('add', 'AdministratorController@add_products')->name('administrator.add_products');
-        Route::get('edit/{id}', 'AdministratorController@edit_product_page')->name('administrator.edit_category_page');
+        Route::get('edit/{id?}', 'AdministratorController@edit_product_page')->name('administrator.edit_product_page');
 
         Route::post('upload', 'AdministratorController@upload_product')->name('administrator.upload.product');
+        Route::get('images/{id?}', 'AdministratorController@get_product_images')->name('administrator.get.images');
+        Route::delete('delete/image', 'AdministratorController@delete_image')->name('administrator.delete.image');
         Route::get('get', 'AdministratorController@get_products')->name('administrator.get_products');
         Route::post('store', 'AdministratorController@store_products')->name('administrator.store_products');
         Route::post('edit', 'AdministratorController@edit_products')->name('administrator.edit_products');
-        Route::post('delete', 'AdministratorController@delete_product')->name('administrator.delete_products');
+        Route::delete('delete', 'AdministratorController@delete_product')->name('administrator.delete_products');
 
     });
 
@@ -52,13 +54,13 @@ Route::prefix('administrator')->group(function() {
 
         Route::get('/', 'AdministratorController@category')->name('administrator.category');
         Route::get('add', 'AdministratorController@add_category')->name('administrator.add_category');
-        Route::get('edit/{id}', 'AdministratorController@edit_category_page')->name('administrator.edit_category_page');
+        Route::get('edit/{id?}', 'AdministratorController@edit_category_page')->name('administrator.edit_category_page');
         
         Route::post('upload', 'AdministratorController@upload_category')->name('administrator.category.upload');
         Route::get('get', 'AdministratorController@get_categories')->name('administrator.get_categories');
         Route::post('store', 'AdministratorController@store_category')->name('administrator.store_category');
         Route::post('edit', 'AdministratorController@edit_category')->name('administrator.edit_category');
-        Route::delete('delete', 'AdministratorController@delete_categeory')->name('administrator.delete_category');
+        Route::delete('delete', 'AdministratorController@delete_category')->name('administrator.delete_category');
 
     });
 
